@@ -8,53 +8,61 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeStudio, setActiveStudio }) => {
   const studios = [
-    { name: 'Nexus Prime', icon: '🧠', desc: 'General Creative Direction' },
-    { name: 'Vivid Lab', icon: '🌈', desc: 'Color & Lighting Theory' },
-    { name: 'Blueprint', icon: '📐', desc: 'Composition & Layout' },
-    { name: 'Dark Matter', icon: '🌑', desc: 'Atmospheric & Gothic' },
+    { id: 'nexus', name: 'Nexus Prime', icon: '◈', desc: 'Dirección Creativa General' },
+    { id: 'vivid', name: 'Vivid Lab', icon: '◇', desc: 'Teoría del Color & Luz' },
+    { id: 'blueprint', name: 'Blueprint', icon: '▣', desc: 'Estructura & Composición' },
+    { id: 'void', name: 'Deep Void', icon: '▽', desc: 'Conceptualización Oscura' },
   ];
 
   return (
-    <aside className="w-80 h-full border-r border-white/5 bg-black/40 flex flex-col shrink-0">
+    <aside className="w-72 h-full bg-black/40 border-r border-white/5 flex flex-col shrink-0 relative z-20">
       <div className="p-8">
-        <div className="flex items-center space-x-3 mb-12">
-          <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-xl flex items-center justify-center font-bold">A</div>
-          <span className="text-xl font-bold tracking-tighter">ART<span className="text-indigo-500">VOLUTION</span></span>
+        <div className="flex items-center space-x-3 mb-16">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center font-black text-sm">A</div>
+          <h1 className="text-lg font-bold tracking-tighter">ART<span className="text-indigo-500">VOLUTION</span></h1>
         </div>
 
-        <nav className="space-y-2">
-          <p className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] mb-4 px-2">Workspace Studios</p>
+        <nav className="space-y-4">
+          <div className="text-[9px] font-mono text-gray-500 uppercase tracking-[0.3em] mb-4">Neural_Gateways</div>
           {studios.map(studio => (
             <button
-              key={studio.name}
+              key={studio.id}
               onClick={() => setActiveStudio(studio.name)}
-              className={`w-full group p-4 rounded-2xl flex items-start space-x-4 transition-all duration-300 text-left ${activeStudio === studio.name ? 'glass border-indigo-500/30' : 'hover:bg-white/5'}`}
+              className={`w-full text-left group transition-all duration-300 ${activeStudio === studio.name ? 'opacity-100' : 'opacity-40 hover:opacity-100'}`}
             >
-              <span className="text-2xl">{studio.icon}</span>
-              <div>
-                <h4 className={`font-bold text-sm ${activeStudio === studio.name ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>{studio.name}</h4>
-                <p className="text-[10px] text-gray-500 mt-1">{studio.desc}</p>
+              <div className="flex items-start space-x-4">
+                <span className={`text-xl ${activeStudio === studio.name ? 'text-indigo-400' : ''}`}>{studio.icon}</span>
+                <div>
+                  <h4 className="text-sm font-bold tracking-wide">{studio.name}</h4>
+                  <p className="text-[10px] text-gray-500 font-mono mt-1">{studio.desc}</p>
+                </div>
               </div>
+              {activeStudio === studio.name && (
+                <div className="h-0.5 w-full bg-gradient-to-r from-indigo-500 to-transparent mt-4"></div>
+              )}
             </button>
           ))}
         </nav>
       </div>
 
-      <div className="mt-auto p-8">
-        <div className="glass p-6 rounded-2xl border-indigo-500/20">
-          <div className="text-xs font-bold text-indigo-400 mb-2 uppercase tracking-widest">Neural Quota</div>
-          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-3">
-             <div className="h-full bg-indigo-500 w-[65%]"></div>
+      <div className="mt-auto p-6 space-y-6">
+        <div className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-[9px] font-mono text-indigo-400">MEMORY_ALLOC</span>
+            <span className="text-[9px] font-mono text-gray-500">72%</span>
           </div>
-          <p className="text-[10px] text-gray-400">650 / 1000 credits remaining</p>
-          <button className="w-full mt-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-gray-200 transition-colors">UPGRADE_CORE</button>
+          <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+             <div className="h-full bg-indigo-500 w-[72%]"></div>
+          </div>
         </div>
         
-        <div className="mt-8 flex items-center space-x-3 px-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-b from-gray-700 to-gray-900 border border-white/10"></div>
+        <div className="flex items-center space-x-4 p-2">
+          <div className="w-10 h-10 rounded-full border border-indigo-500/30 p-0.5">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Artisan" className="rounded-full bg-indigo-950" alt="Avatar" />
+          </div>
           <div>
-            <div className="text-sm font-bold">CyberArtisan_X</div>
-            <div className="text-[10px] text-green-500 uppercase font-mono">Verified Voyager</div>
+            <div className="text-xs font-bold">ALPHA_USER_01</div>
+            <div className="text-[9px] font-mono text-green-500">CONNECTED_CORE</div>
           </div>
         </div>
       </div>

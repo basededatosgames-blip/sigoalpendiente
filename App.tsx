@@ -1,73 +1,99 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import Navbar from './components/Navbar';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatWorkspace from './components/ChatWorkspace';
 
 const App: React.FC = () => {
-  const [isAppStarted, setIsAppStarted] = useState(false);
+  const [bootStatus, setBootStatus] = useState<'idle' | 'loading' | 'ready'>('idle');
+  const [loadProgress, setLoadProgress] = useState(0);
   const [activeStudio, setActiveStudio] = useState('Nexus Prime');
 
-  if (!isAppStarted) {
-    return (
-      <div className="min-h-screen bg-[#030014] overflow-hidden flex flex-col">
-        <Navbar />
-        <div className="flex-grow flex flex-col items-center justify-center relative px-6 text-center">
-          {/* Background FX */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-[150px] animate-pulse"></div>
-          
-          <div className="relative z-10 max-w-4xl">
-            <h1 className="text-7xl md:text-9xl font-black mb-8 leading-tight tracking-tighter">
-              ART<span className="gradient-text">VOLUTION</span>
-            </h1>
-            <p className="text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-              Enter the world's most advanced neural workspace for digital visionaries.
-            </p>
-            <button 
-              onClick={() => setIsAppStarted(true)}
-              className="group relative px-12 py-6 bg-white text-black font-black text-2xl rounded-2xl hover:scale-105 transition-all duration-500 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
-            >
-              <span className="relative z-10">INITIALIZE NEXUS</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl -z-0"></div>
-            </button>
-          </div>
+  const startBoot = () => {
+    setBootStatus('loading');
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        setTimeout(() => setBootStatus('ready'), 500);
+      }
+      setLoadProgress(Math.floor(progress));
+    }, 150);
+  };
 
-          <div className="mt-20 grid grid-cols-3 gap-12 opacity-40">
-            <div className="text-center">
-              <div className="text-3xl font-bold">120+</div>
-              <div className="text-xs uppercase tracking-widest text-gray-500">Neural Models</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold">450ms</div>
-              <div className="text-xs uppercase tracking-widest text-gray-500">Latency</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold">8K</div>
-              <div className="text-xs uppercase tracking-widest text-gray-500">Synthesis</div>
-            </div>
+  if (bootStatus !== 'ready') {
+    return (
+      <div className="h-full w-full flex flex-col items-center justify-center p-6 bg-[#030014] relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-600/10 blur-[120px] rounded-full"></div>
+        </div>
+
+        <div className="relative z-10 text-center max-w-2xl">
+          <div className="mb-4 inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-mono text-indigo-400 tracking-[0.3em]">
+            SYSTEM_VERSION: 2.0.4_BETA
           </div>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-6">
+            ART<span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">VOLUTION</span>
+          </h1>
+          
+          {bootStatus === 'idle' ? (
+            <>
+              <p className="text-gray-400 text-lg mb-12 font-light tracking-wide">
+                Bienvenido al nexo creativo definitivo. <br/>Interconecta tu mente con inteligencia artificial de vanguardia.
+              </p>
+              <button 
+                onClick={startBoot}
+                className="px-12 py-5 bg-white text-black font-black text-xl rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+              >
+                INICIALIZAR NEXO
+              </button>
+            </>
+          ) : (
+            <div className="w-64 mx-auto space-y-4">
+              <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${loadProgress}%` }}></div>
+              </div>
+              <div className="flex justify-between font-mono text-[10px] text-gray-500">
+                <span>LOADING_CORE_MODULES...</span>
+                <span>{loadProgress}%</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen bg-[#030014] flex text-white overflow-hidden selection:bg-indigo-500/40">
+    <div className="h-screen w-full bg-[#030014] flex overflow-hidden animate-fade-in">
       <Sidebar activeStudio={activeStudio} setActiveStudio={setActiveStudio} />
+      
       <main className="flex-grow flex flex-col relative h-full">
-        <header className="h-16 border-b border-white/5 flex items-center justify-between px-8 glass shrink-0">
+        <header className="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/20 backdrop-blur-xl shrink-0">
           <div className="flex items-center space-x-4">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            <h2 className="font-bold text-sm tracking-widest uppercase text-gray-400">{activeStudio}</h2>
+            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+            <h2 className="font-mono text-xs font-bold uppercase text-gray-400 tracking-widest">
+              NEXUS_LINK // {activeStudio}
+            </h2>
           </div>
-          <div className="flex items-center space-x-6">
-             <div className="text-xs font-mono text-indigo-400">GPU_STATUS: OPTIMAL</div>
-             <button className="px-4 py-1.5 glass rounded-lg text-xs font-bold hover:bg-white/10 transition-colors">EXPORT_SESSION</button>
+          <div className="hidden md:flex items-center space-x-6">
+             <div className="flex items-center space-x-2 text-[10px] font-mono text-indigo-400">
+                <span className="w-2 h-2 rounded-full border border-indigo-400"></span>
+                <span>SYNC_STABLE</span>
+             </div>
+             <button className="px-4 py-1.5 border border-white/10 rounded-lg text-[10px] font-bold hover:bg-white/5 transition-all">TERMINATE_SESSION</button>
           </div>
         </header>
         
         <ChatWorkspace studioName={activeStudio} />
       </main>
+
+      <style>{`
+        .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      `}</style>
     </div>
   );
 };
