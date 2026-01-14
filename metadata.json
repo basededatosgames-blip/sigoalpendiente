@@ -1,0 +1,7 @@
+{
+  "name": "ArtVolution - AI Creative Nexus",
+  "description": "A cutting-edge platform connecting artists with high-performance AI tools to redefine digital creation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
